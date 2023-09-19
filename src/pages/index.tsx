@@ -41,11 +41,8 @@ const mockPlaces = [
 ];
 
 export default function Home() {
-  const { data: session } = useSession();
-
   const [marker, setMarker] = useState<{ lat: number; lng: number }>();
   const [coords, setCoords] = useState<{ lat: number; lng: number }>();
-  const [bounds, setBounds] = useState({});
 
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete>();
