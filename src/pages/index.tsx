@@ -81,7 +81,7 @@ export default function Home() {
       },
     );
   }, []);
-  console.log("trigger");
+  console.log("trigger!");
   return (
     <>
       <Head>
