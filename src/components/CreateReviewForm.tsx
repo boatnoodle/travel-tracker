@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 /* ------------------------------- Interfaces ------------------------------- */
 
-export const FormCreateReview: React.FC<any> = () => {
+export const FormCreateReview: React.FC = () => {
   /* ---------------------------------- Hooks --------------------------------- */
 
   /* --------------------------------- States --------------------------------- */
