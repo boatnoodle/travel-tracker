@@ -92,50 +92,47 @@ function Page() {
   }, []);
 
   return (
-    <Layout>
-      <LoadScript
-        id="script-loader"
-        googleMapsApiKey="AIzaSyDNc3leOhd15yiV8tkx28h-uTaYq-dbpGo"
-        libraries={["places"]}
+    // <Layout>
+    <LoadScript
+      id="script-loader"
+      googleMapsApiKey="AIzaSyDNc3leOhd15yiV8tkx28h-uTaYq-dbpGo"
+      libraries={["places"]}
+    >
+      <CreateReviewModal isOpen={false} />
+      <Autocomplete onLoad={onAutocompleteLoad} onPlaceChanged={onPlaceChanged}>
+        <div>
+          <input className="" placeholder="Search…" />
+        </div>
+      </Autocomplete>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={coords}
+        zoom={16}
+        onClick={onClickMap}
       >
-        <CreateReviewModal isOpen={false} />
-        <Autocomplete
-          onLoad={onAutocompleteLoad}
-          onPlaceChanged={onPlaceChanged}
-        >
-          <div>
-            <input className="" placeholder="Search…" />
-          </div>
-        </Autocomplete>
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={coords}
-          zoom={16}
-          onClick={onClickMap}
-        >
-          {marker && marker.lat && marker.lng && (
-            <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
-              <InfoWindowF position={{ lat: marker.lat, lng: marker.lng }}>
-                <button>Create Review</button>
-              </InfoWindowF>
-            </MarkerF>
-          )}
-          {mockPlaces.map((each, i) => {
-            return (
-              <InfoWindowF
-                key={i}
-                position={{
-                  lat: each.lat,
-                  lng: each.lng,
-                }}
-              >
-                <RestaurantCard />
-              </InfoWindowF>
-            );
-          })}
-        </GoogleMap>
-      </LoadScript>
-    </Layout>
+        {marker && marker.lat && marker.lng && (
+          <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
+            <InfoWindowF position={{ lat: marker.lat, lng: marker.lng }}>
+              <button>Create Review</button>
+            </InfoWindowF>
+          </MarkerF>
+        )}
+        {mockPlaces.map((each, i) => {
+          return (
+            <InfoWindowF
+              key={i}
+              position={{
+                lat: each.lat,
+                lng: each.lng,
+              }}
+            >
+              <RestaurantCard />
+            </InfoWindowF>
+          );
+        })}
+      </GoogleMap>
+    </LoadScript>
+    // </Layout>
   );
 }
 
