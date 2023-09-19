@@ -46,9 +46,6 @@ export default function Home() {
   const [marker, setMarker] = useState<{ lat: number; lng: number }>();
   const [coords, setCoords] = useState<{ lat: number; lng: number }>();
   const [bounds, setBounds] = useState({});
-  // const [places, setPlaces] = useState<
-  //   { latitude: number; longitude: number }[]
-  // >(mockPlaces as any);
 
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete>();
