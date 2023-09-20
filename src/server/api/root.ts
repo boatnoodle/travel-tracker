@@ -1,6 +1,8 @@
 import { exampleRouter } from "@/server/api/routers/example";
 import { createTRPCRouter } from "@/server/api/trpc";
 
+import { placeRouter } from "./routers/place";
+
 /**
  * This is the primary router for your server.
  *
@@ -8,6 +10,7 @@ import { createTRPCRouter } from "@/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
+  place: placeRouter,
 });
 
 // export type definition of API
