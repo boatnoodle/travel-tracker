@@ -4,6 +4,9 @@
  
 @layer base {
   :root {
+    touch-action: pan-x pan-y;
+    height: 100%;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
