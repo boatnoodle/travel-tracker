@@ -163,7 +163,7 @@ export default function Home() {
         </Autocomplete>
         <GoogleMap
           options={{
-            gestureHandling: '<ul> <li> <code>"cooperative"</code>"',
+            gestureHandling: "cooperative",
           }}
           mapContainerStyle={containerStyle}
           center={coords}
