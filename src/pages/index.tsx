@@ -2,11 +2,12 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 
-import { CreateReviewModal } from "@/components/CreateReviewModal";
-import RestaurantCard from "@/components/ResturantCard";
+import { CreatePlaceContent } from "@/components/CreatePlaceContent";
+import { PlacePin } from "@/components/PlacePin";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { api } from "@/utils/api";
 import {
   Autocomplete,
   GoogleMap,
@@ -23,6 +24,7 @@ const containerStyle = {
 };
 
 /* ------------------------------- Interfaces ------------------------------- */
+export type location = { lat: number; lng: number };
 const mockPlaces = [
   {
     location_id: "4090348",
@@ -46,9 +48,14 @@ const mockPlaces = [
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const [marker, setMarker] = useState<{ lat: number; lng: number }>();
-  const [coords, setCoords] = useState<{ lat: number; lng: number }>();
-  const [isOpen, setIsOpen] = useState(false);
+  const [marker, setMarker] = useState<location>();
+  const [coords, setCoords] = useState<location>();
+  const [open, setOpen] = useState(false);
+  const {
+    data: places,
+    isLoading: placeLoading,
+    refetch: refetchPlace,
+  } = api.place.getAll.useQuery();
 
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete>();
@@ -76,12 +83,14 @@ export default function Home() {
     setMarker({ lat, lng });
   };
 
-  const onToggleModal = () => {};
+  const onPlaceCreated = () => {
+    setOpen(!open);
+    refetchPlace();
+  };
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
-        console.log(latitude, longitude);
         setCoords({ lat: latitude, lng: longitude });
       },
     );
@@ -101,8 +110,13 @@ export default function Home() {
         googleMapsApiKey="AIzaSyDNc3leOhd15yiV8tkx28h-uTaYq-dbpGo"
         libraries={["places"]}
       >
-        <Dialog>
-          <CreateReviewModal />
+        <Dialog open={open} onOpenChange={setOpen}>
+          <CreatePlaceContent
+            location={marker}
+            onCreated={() => {
+              onPlaceCreated();
+            }}
+          />
           <Autocomplete
             onLoad={onAutocompleteLoad}
             onPlaceChanged={onPlaceChanged}
@@ -121,21 +135,21 @@ export default function Home() {
               <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
                 <InfoWindowF position={{ lat: marker.lat, lng: marker.lng }}>
                   <DialogTrigger asChild>
-                    <Button>เขียนรีวิว</Button>
+                    <Button>เปิดประเด็น</Button>
                   </DialogTrigger>
                 </InfoWindowF>
               </MarkerF>
             )}
-            {mockPlaces.map((each, i) => {
+            {places?.map((place, i) => {
               return (
                 <InfoWindowF
                   key={i}
                   position={{
-                    lat: each.lat,
-                    lng: each.lng,
+                    lat: place.lat,
+                    lng: place.lng,
                   }}
                 >
-                  <RestaurantCard />
+                  <PlacePin placeData={place} />
                 </InfoWindowF>
               );
             })}

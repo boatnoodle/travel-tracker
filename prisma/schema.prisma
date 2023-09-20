@@ -75,6 +75,8 @@ model Place {
     name        String
     description String?
     rate        Float?   @default(0)
+    lat         Float
+    lng         Float
     images      String[]
     userId      String
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
