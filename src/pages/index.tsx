@@ -2,11 +2,14 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
 
-import { CreatePlaceContent } from "@/components/CreatePlaceContent";
+import { AllReviewDialog } from "@/components/AllReviewDialog";
+import { CreatePlaceDialog } from "@/components/CreatePlaceDialog";
+import { CreateReviewDialog } from "@/components/CreateReviewDialog";
 import { PlacePin } from "@/components/PlacePin";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import {
   Autocomplete,
@@ -50,7 +53,10 @@ export default function Home() {
   const { data: session, status } = useSession();
   const [marker, setMarker] = useState<location>();
   const [coords, setCoords] = useState<location>();
-  const [open, setOpen] = useState(false);
+  const [openPlaceDialog, setOpenPlaceDialog] = useState(false);
+  const [openReviewDialog, setOpenReviewDialog] = useState(false);
+  const [openAllReviewDialog, setOpenAllReviewDialog] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place>(null);
   const {
     data: places,
     isLoading: placeLoading,
@@ -84,7 +90,17 @@ export default function Home() {
   };
 
   const onPlaceCreated = () => {
-    setOpen(!open);
+    setOpenPlaceDialog(!openPlaceDialog);
+    refetchPlace();
+  };
+
+  const onSelectPlace = (place: Place) => {
+    setSelectedPlace(place);
+    setOpenReviewDialog(!openReviewDialog);
+  };
+
+  const onReviewCreated = () => {
+    setOpenReviewDialog(!openReviewDialog);
     refetchPlace();
   };
 
@@ -110,51 +126,77 @@ export default function Home() {
         googleMapsApiKey="AIzaSyDNc3leOhd15yiV8tkx28h-uTaYq-dbpGo"
         libraries={["places"]}
       >
-        <Dialog open={open} onOpenChange={setOpen}>
-          <CreatePlaceContent
-            location={marker}
-            onCreated={() => {
-              onPlaceCreated();
+        <CreatePlaceDialog
+          open={openPlaceDialog}
+          onOpenChange={(value) => setOpenPlaceDialog(value)}
+          location={marker}
+          onCreated={onPlaceCreated}
+        />
+        {selectedPlace && (
+          <CreateReviewDialog
+            placeData={selectedPlace}
+            open={openReviewDialog}
+            onOpenChange={(value) => {
+              setSelectedPlace(null);
+              setOpenReviewDialog(value);
+            }}
+            onCreated={onReviewCreated}
+          />
+        )}
+        {openAllReviewDialog && selectedPlace && (
+          <AllReviewDialog
+            place={selectedPlace}
+            open={openAllReviewDialog}
+            onOpenChange={(value) => {
+              setSelectedPlace(null);
+              setOpenAllReviewDialog(value);
             }}
           />
-          <Autocomplete
-            onLoad={onAutocompleteLoad}
-            onPlaceChanged={onPlaceChanged}
-          >
-            <div>
-              <Input className="" placeholder="Search…" />
-            </div>
-          </Autocomplete>
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={coords}
-            zoom={16}
-            onClick={onClickMap}
-          >
-            {marker && marker.lat && marker.lng && (
-              <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
-                <InfoWindowF position={{ lat: marker.lat, lng: marker.lng }}>
-                  <DialogTrigger asChild>
-                    <Button>เปิดประเด็น</Button>
-                  </DialogTrigger>
-                </InfoWindowF>
-              </MarkerF>
-            )}
-            {places?.map((place, i) => {
-              return (
-                <InfoWindowF
-                  key={i}
-                  position={{
-                    lat: place.lat,
-                    lng: place.lng,
+        )}
+        <Autocomplete
+          onLoad={onAutocompleteLoad}
+          onPlaceChanged={onPlaceChanged}
+        >
+          <div className="fixed left-0 top-0 z-50 w-full">
+            <Input className="" placeholder="Search…" />
+          </div>
+        </Autocomplete>
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={coords}
+          zoom={16}
+          onClick={onClickMap}
+        >
+          {marker && marker.lat && marker.lng && (
+            <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
+              <InfoWindowF position={{ lat: marker.lat, lng: marker.lng }}>
+                <Button onClick={() => setOpenPlaceDialog(!openPlaceDialog)}>
+                  เปิดประเด็น
+                </Button>
+              </InfoWindowF>
+            </MarkerF>
+          )}
+          {places?.map((place, i) => {
+            return (
+              <InfoWindowF
+                key={i}
+                position={{
+                  lat: place.lat,
+                  lng: place.lng,
+                }}
+              >
+                <PlacePin
+                  onSelectPreviewReview={() => {
+                    setOpenAllReviewDialog(!openAllReviewDialog);
+                    setSelectedPlace(place);
                   }}
-                >
-                  <PlacePin placeData={place} />
-                </InfoWindowF>
-              );
-            })}
-          </GoogleMap>
-        </Dialog>
+                  onSelectCreateReview={onSelectPlace}
+                  placeData={place}
+                />
+              </InfoWindowF>
+            );
+          })}
+        </GoogleMap>
       </LoadScript>
     </>
   );
