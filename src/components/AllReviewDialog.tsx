@@ -5,7 +5,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { replaceTextWithEllipsis } from "@/lib/utils";
 import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
-import { DialogOverlay } from "@radix-ui/react-dialog";
+import { BiPlus } from "react-icons/bi";
 
 // import { ImageSlide } from "./ImageSlider";
 import {
@@ -50,13 +50,14 @@ export const AllReviewDialog: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="DialogContent flex flex-col">
-        {isLoading && <h2 className="text-sm">โหลดแป๊ปๆ</h2>}
         <Button
-          className="w-fit tracking-wide"
+          className="flex w-fit gap-1 tracking-wide"
           onClick={() => onSelectCreateReview(place)}
         >
+          <BiPlus />
           สร้างรีวิวของฉัน
         </Button>
+        {isLoading && <h2 className="text-sm">โหลดแป๊ปๆ</h2>}
         {!isLoading && data && data.length === 0 && (
           <h2 className="text-sm">ยังไม่มีคนโม้เลยอ่ะ</h2>
         )}
