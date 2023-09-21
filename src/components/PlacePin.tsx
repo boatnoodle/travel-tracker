@@ -1,10 +1,10 @@
-import Image from 'next/image';
-import React from 'react';
+import Image from "next/image";
+import React from "react";
 
-import { getImage } from '@/lib/supabase';
-import { Place } from '@/server/api/root';
+import { getImage } from "@/lib/supabase";
+import { Place } from "@/server/api/root";
 
-import { Button } from './ui/button';
+import { Button } from "./ui/button";
 
 interface Props {
   onSelectPreviewReview: (place: Place) => void;
@@ -18,7 +18,16 @@ export const PlacePin: React.FC<Props> = ({
   placeData,
 }) => {
   return (
-    <div className="flex h-[136px] w-[136px]  flex-col items-center bg-white shadow-lg">
+    <div className="flex h-full w-[136px] flex-col items-center gap-2 bg-white shadow-lg">
+      <div className="">
+        <a
+          className="font-kanit-medium text-sm"
+          onClick={() => onSelectPreviewReview(placeData)}
+          href="#"
+        >
+          {placeData.name}
+        </a>
+      </div>
       <div className="relative h-[64px] w-full overflow-hidden">
         <Image
           src={getImage("places/" + placeData.images[0])}
@@ -28,18 +37,13 @@ export const PlacePin: React.FC<Props> = ({
           className="rounded-md"
         />
       </div>
-      <div className="flex-auto">
-        <a
-          className="font-kanit-medium"
-          onClick={() => onSelectPreviewReview(placeData)}
-          href="#"
+      <div className="">
+        <Button
+          className="rounded-full border-[1px] border-emerald-500 bg-white px-3 tracking-wide text-emerald-500"
+          size="sm"
+          onClick={() => onSelectCreateReview(placeData)}
         >
-          {placeData.name} (คลิก)
-        </a>
-      </div>
-      <div className="flex-auto">
-        <Button size="sm" onClick={() => onSelectCreateReview(placeData)}>
-          เขียนรีวิว
+          อ่าน/เขียนรีวิว
         </Button>
       </div>
     </div>

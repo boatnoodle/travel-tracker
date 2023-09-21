@@ -212,7 +212,7 @@ export default function Home() {
           />
         )}
       </LoadScript>
-      <div className="fixed bottom-0 right-0">
+      <div className="fixed bottom-0 right-0 px-3 py-5">
         <Button variant="outline" onClick={() => window.location.reload()}>
           รีเฟรช
         </Button>

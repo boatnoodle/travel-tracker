@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
-
 import { useForm } from "react-hook-form";
+import ClipLoader from "react-spinners/ClipLoader";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Loader } from "./Loader";
 import { Rating } from "./Rating";
 import {
   Form,
@@ -30,7 +30,6 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
-import { Loader } from "./Loader";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -74,7 +73,7 @@ export const CreateReviewDialog: React.FC<Props> = ({
     defaultValues: {
       placeId: placeData.id,
       comment: "",
-      rate: "5",
+      rate: "",
       images: [],
     },
   });
