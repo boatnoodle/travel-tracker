@@ -28,14 +28,6 @@ export const placeRouter = createTRPCRouter({
       });
     }),
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.place.findMany({
-      include: {
-        _count: {
-          select: {
-            reviews: true,
-          },
-        },
-      },
-    });
+    return ctx.db.place.findMany();
   }),
 });

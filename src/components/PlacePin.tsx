@@ -34,14 +34,14 @@ export const PlacePin: React.FC<Props> = ({
             className="rounded-md"
           />
         </div>
-        <div className="my-1 flex gap-1">
+        {/* <div className="my-1 flex gap-1">
           <p className="rounded-full bg-blue-600 px-[6px] py-[1px] text-xs text-white">
             {placeData._count.reviews} รีวิว
           </p>
           <p className="rounded-full bg-blue-600 px-[6px] py-[1px] text-xs text-white">
             คะแนน: {placeData.rate}
           </p>
-        </div>
+        </div> */}
       </a>
 
       <div className="w-full">
