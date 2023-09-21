@@ -115,7 +115,7 @@ export const CreateReviewDialog: React.FC<Props> = ({
       console.error(error);
       toast({
         title: "พังคับโพ้มม",
-        description: JSON.stringify(error),
+        description: JSON.stringify(error.message),
         variant: "destructive",
       });
     } finally {
@@ -129,27 +129,28 @@ export const CreateReviewDialog: React.FC<Props> = ({
         throw new Error("You must select an image to upload.");
       }
 
-      const fileExt = file.name.split(".").pop();
-      const imageExtensions = [
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".gif",
-        ".bmp",
-        ".tif",
-        ".tiff",
-        ".webp",
-        ".svg",
-        ".raw (various extensions)",
-        ".ico",
-        ".heif",
-        ".heic",
-        ".exif",
-      ];
-      let filePath: string;
+      // const fileExt = file.name.split(".").pop();
+      // const imageExtensions = [
+      //   ".jpg",
+      //   ".jpeg",
+      //   ".png",
+      //   ".gif",
+      //   ".bmp",
+      //   ".tif",
+      //   ".tiff",
+      //   ".webp",
+      //   ".svg",
+      //   ".raw (various extensions)",
+      //   ".ico",
+      //   ".heif",
+      //   ".heic",
+      //   ".exif",
+      // ];
+      // let filePath: string;
 
-      if (!imageExtensions.includes(fileExt)) filePath = `${Date.now()}`;
-      else filePath = `${Date.now()}.${fileExt}`;
+      // if (!imageExtensions.includes(fileExt)) filePath = `${Date.now()}`;
+      // else filePath = `${Date.now()}.${fileExt}`;
+      const filePath = Date.now() + ".jpg";
 
       let { error: uploadError } = await uploadFile(
         "reviews/" + filePath,
@@ -158,7 +159,7 @@ export const CreateReviewDialog: React.FC<Props> = ({
 
       if (uploadError) {
         toast({
-          description: JSON.stringify(uploadError),
+          description: JSON.stringify(uploadError.message),
           variant: "destructive",
         });
         throw uploadError;
@@ -167,10 +168,10 @@ export const CreateReviewDialog: React.FC<Props> = ({
       return filePath;
     } catch (error) {
       toast({
-        description: JSON.stringify(error),
+        description: JSON.stringify(error.message),
         variant: "destructive",
       });
-      throw error(error);
+      throw error(error.message);
     }
   };
 
