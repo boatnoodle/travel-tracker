@@ -5,7 +5,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { replaceTextWithEllipsis } from "@/lib/utils";
 import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
-import { BiPlus } from "react-icons/bi";
+import { BiPlus, BiSolidStar, BiStar } from "react-icons/bi";
 
 // import { ImageSlide } from "./ImageSlider";
 import {
@@ -57,9 +57,9 @@ export const AllReviewDialog: React.FC<Props> = ({
           <BiPlus />
           สร้างรีวิวของฉัน
         </Button>
-        {isLoading && <h2 className="text-sm">โหลดแป๊ปๆ</h2>}
+        {isLoading && <h2 className="text-sm">กำลังโหลด...</h2>}
         {!isLoading && data && data.length === 0 && (
-          <h2 className="text-sm">ยังไม่มีคนโม้เลยอ่ะ</h2>
+          <h2 className="text-sm">ยังไม่มีรีวิว</h2>
         )}
 
         {data?.map((each, idx) => (
@@ -71,10 +71,23 @@ export const AllReviewDialog: React.FC<Props> = ({
                 )} */}
             </CardHeader>
             <CardContent>
-              <CardDescription>รีวิวของท่าน: {each.user.name}</CardDescription>
+              <CardDescription>รีวิวของ: {each.user.name}</CardDescription>
+              <CardDescription className="flex items-center gap-1">
+                คะแนน:
+                {new Array(each.rate)
+                  .fill(<BiSolidStar color="orange" />)
+                  .map((each) => {
+                    return each;
+                  })}
+                {new Array(5 - each.rate)
+                  .fill(<BiStar color="orange" />)
+                  .map((each) => {
+                    return each;
+                  })}
+              </CardDescription>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button>ส่องเพิ่ม</Button>
+              <Button>อ่านรีวิวเต็ม</Button>
             </CardFooter>
           </Card>
         ))}
