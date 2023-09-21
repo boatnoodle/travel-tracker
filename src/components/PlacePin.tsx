@@ -18,14 +18,14 @@ export const PlacePin: React.FC<Props> = ({
   placeData,
 }) => {
   return (
-    <div className="flex h-full w-32 flex-col items-center gap-3 bg-white shadow-lg">
+    <div className="flex h-fit w-32 flex-col items-center gap-1 bg-white shadow-lg">
       <a
         className="flex w-full flex-col items-center gap-1 font-kanit-medium text-sm"
         onClick={() => onSelectPreviewReview(placeData)}
         href="#"
       >
-        {placeData.name}
-        <div className="relative h-[64px] w-full overflow-hidden">
+        <p className="w-full truncate text-center">{placeData.name}</p>
+        <div className="relative h-20 w-full overflow-hidden">
           <Image
             src={getImage("places/" + placeData.images[0])}
             fill={true}
@@ -34,15 +34,23 @@ export const PlacePin: React.FC<Props> = ({
             className="rounded-md"
           />
         </div>
+        <div className="my-1 flex gap-1">
+          <p className="rounded-full bg-blue-600 px-[6px] py-[1px] text-xs text-white">
+            {placeData._count.reviews} รีวิว
+          </p>
+          <p className="rounded-full bg-blue-600 px-[6px] py-[1px] text-xs text-white">
+            คะแนน: {placeData.rate}
+          </p>
+        </div>
       </a>
 
-      <div className="">
+      <div className="w-full">
         <Button
-          className="rounded-full border-[1px] border-emerald-500 bg-emerald-50 px-3 tracking-wide text-emerald-500"
+          className="w-full rounded-full border-[1px] border-emerald-500 bg-emerald-50 text-sm tracking-wide text-emerald-500"
           size="sm"
           onClick={() => onSelectPreviewReview(placeData)}
         >
-          อ่าน/เขียนรีวิว ({placeData._count.reviews})
+          อ่าน/เขียนรีวิว
         </Button>
       </div>
     </div>

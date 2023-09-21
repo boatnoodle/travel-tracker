@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { ImageSlide } from "./ImageSlider";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -66,9 +67,9 @@ export const AllReviewDialog: React.FC<Props> = ({
           <Card className="w-full" key={idx}>
             <CardHeader>
               <CardTitle>{replaceTextWithEllipsis(each.comment, 30)}</CardTitle>
-              {/* {each.images && each.images.length > 0 && (
-                  <ImageSlide images={each.images} />
-                )} */}
+              {each.images && each.images.length > 0 && (
+                <ImageSlide images={each.images} />
+              )}
             </CardHeader>
             <CardContent>
               <CardDescription>รีวิวของ: {each.user.name}</CardDescription>
