@@ -41,6 +41,16 @@ export const reviewRouter = createTRPCRouter({
         },
       });
     }),
+  getMyReviews: publicProcedure.query(({ ctx }) => {
+    return ctx.db.review.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      include: {
+        user: true,
+      },
+    });
+  }),
   getById: publicProcedure.input(z.string()).query(({ ctx, input }) => {
     return ctx.db.review.findFirst({
       where: {
