@@ -19,6 +19,7 @@ import {
 } from "@react-google-maps/api";
 import Image from "next/image";
 import { MyReviewDialog } from "@/components/MyReviewDialog";
+import { BsPinMap } from "react-icons/bs";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -159,9 +160,10 @@ export default function Home() {
                 }}
               >
                 <Button
-                  className="bg-gradient-to-tr from-blue-800 to-emerald-500 tracking-wide"
+                  className="flex items-center gap-1 bg-gradient-to-tr from-blue-800 to-emerald-500 tracking-wide"
                   onClick={() => setOpenPlaceDialog(!openPlaceDialog)}
                 >
+                  <BsPinMap />
                   สร้างสถานที่
                 </Button>
               </InfoWindowF>

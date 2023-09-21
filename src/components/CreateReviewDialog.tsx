@@ -185,11 +185,11 @@ export const CreateReviewDialog: React.FC<Props> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="DialogContent">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <DialogHeader>
-              <DialogTitle>พูดถึง ถึง "{placeData.name}" หน่อย</DialogTitle>
+              <DialogTitle>พูดถึง "{placeData.name}" หน่อย</DialogTitle>
               <DialogDescription>
-                อย่าไปยอม เค้าโม้กันใหญ่แล้ว
+                อธิบายความประทับใจ หรือไม่ประทับใจ ที่มีต่อที่นี่
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -198,7 +198,7 @@ export const CreateReviewDialog: React.FC<Props> = ({
                 name="rate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ให้คะแนนที่นี่เท่าไร</FormLabel>
+                    <FormLabel>1. ให้คะแนนที่นี่เท่าไร</FormLabel>
                     <FormControl>
                       <Rating
                         value={form.getValues().rate}
@@ -214,11 +214,11 @@ export const CreateReviewDialog: React.FC<Props> = ({
                 name="comment"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>จัดไปขอยาวๆ ฝุดๆ ไปเลย</FormLabel>
+                    <FormLabel>2. บรรยายความรู้สึกแบบเรียลๆ ไปเลย</FormLabel>
                     <FormControl>
                       <Textarea
-                        rows={20}
-                        placeholder="เอาให้ชาวแก๊งแห่กันไปเล้ย เอ๊ะ...!? หรือว่าเตือนให้ชาวแก๊งหนีปัยยย!!!"
+                        rows={10}
+                        placeholder="แบ่งปันประสบการณ์ ทั้งที่ประทับใจ และไม่ประทับใจให้ทุกคนรู้"
                         {...field}
                       />
                     </FormControl>
@@ -231,7 +231,9 @@ export const CreateReviewDialog: React.FC<Props> = ({
                 name="images"
                 render={() => (
                   <FormItem>
-                    <FormLabel>ไหนขอภาพกาวๆ หน่อย</FormLabel>
+                    <FormLabel>
+                      3. แบ่งปันทั้งภาพสวยๆ และภาพเรียลๆ ให้เพื่อนๆ เห็น
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="file"
@@ -246,7 +248,7 @@ export const CreateReviewDialog: React.FC<Props> = ({
             </div>
             <DialogFooter>
               <Button type="submit" disabled={loading}>
-                {loading ? "โหลดอยู่ๆ หมุนๆๆๆ(ปลอมๆ)" : "โม้ ณ บัด now~~~"}
+                {loading ? "กำลังโหลด..." : "แชร์ประสบการณ์เลย"}
               </Button>
             </DialogFooter>
             {loading && (
