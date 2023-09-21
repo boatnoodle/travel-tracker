@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { uploadFile } from "@/lib/supabase";
 import { location } from "@/pages";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,7 +26,6 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Toaster } from "./ui/toaster";
 import { useToast } from "./ui/use-toast";
 
 /* --------------------------------- Styles --------------------------------- */
@@ -43,6 +43,7 @@ const formSchema = z.object({
     message: "บอกหน่อยน้า",
   }),
   description: z.string().nullable(),
+  images: z.any(),
 });
 
 export const CreatePlaceDialog: React.FC<Props> = ({
@@ -53,10 +54,12 @@ export const CreatePlaceDialog: React.FC<Props> = ({
 }) => {
   /* ---------------------------------- Hooks --------------------------------- */
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      images: [],
     },
   });
 
@@ -69,15 +72,62 @@ export const CreatePlaceDialog: React.FC<Props> = ({
 
   /* --------------------------------- Logics --------------------------------- */
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { lat, lng } = location;
-    await mutation.mutateAsync({ ...values, lat, lng });
-    toast({
-      title: "สร้างแว้ววว",
-      description: "ไหน! รีวิวให้เด็กมันดูหน่อยคับ",
-    });
-    onCreated();
-    form.reset();
+    try {
+      setLoading(true);
+      const files = values.images;
+      let imageUrls = [];
+
+      if (files && files.length > 0) {
+        let uploadPromises = [];
+        for (const file of files) {
+          uploadPromises.push(uploadImage(file));
+        }
+
+        const uploadResults = await Promise.all(uploadPromises);
+        imageUrls = uploadResults;
+      }
+
+      const { lat, lng } = location;
+      await mutation.mutateAsync({ ...values, lat, lng, images: imageUrls });
+      toast({
+        title: "สร้างแว้ววว",
+        description: "ไหน! รีวิวให้เด็กมันดูหน่อยคับ",
+      });
+
+      onCreated();
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "พังคับโพ้มม",
+        description: "เดี๋ยวกลับมาใช้ใหม่นะ ฮือๆ",
+        variant: "destructive",
+      });
+    } finally {
+      form.reset();
+      setLoading(false);
+    }
   }
+
+  const uploadImage = async (file: File) => {
+    try {
+      if (!file) {
+        throw new Error("You must select an image to upload.");
+      }
+
+      const fileExt = file.name.split(".").pop();
+      const filePath = `${Math.random()}.${fileExt}`;
+
+      let { error: uploadError } = await uploadFile("places/" + filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      return filePath;
+    } catch (error) {
+      throw error(error);
+    }
+  };
 
   /* --------------------------------- Effects -------------------------------- */
 
@@ -114,6 +164,23 @@ export const CreatePlaceDialog: React.FC<Props> = ({
                       <Textarea
                         placeholder="ไม่ต้องยาวมากก็ได้ พอกล้อมแกล้ม..."
                         {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="images"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>ไหนขอภาพกาวๆ หน่อย</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        multiple
+                        {...form.register("images")}
                       />
                     </FormControl>
                     <FormMessage />

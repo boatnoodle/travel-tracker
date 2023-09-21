@@ -7,7 +7,6 @@ import { CreatePlaceDialog } from "@/components/CreatePlaceDialog";
 import { CreateReviewDialog } from "@/components/CreateReviewDialog";
 import { PlacePin } from "@/components/PlacePin";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
@@ -28,26 +27,6 @@ const containerStyle = {
 
 /* ------------------------------- Interfaces ------------------------------- */
 export type location = { lat: number; lng: number };
-const mockPlaces = [
-  {
-    location_id: "4090348",
-    name: "Cafe' by Navy Wives Association",
-    lat: 13.720079240212836,
-    lng: 100.38313747882236,
-  },
-  {
-    location_id: "4090348",
-    name: "Cafe' by Navy Wives Association",
-    lat: 13.717722405250667,
-    lng: 100.38350025900671,
-  },
-  {
-    location_id: "4090348",
-    name: "Cafe' by Navy Wives Association",
-    lat: 13.71232656240719,
-    lng: 100.4520912394102,
-  },
-];
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -108,6 +87,10 @@ export default function Home() {
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         setCoords({ lat: latitude, lng: longitude });
+      },
+      (error) => {
+        console.error(error);
+        setCoords({ lat: 13.7192347, lng: 100.3810988 });
       },
     );
   }, []);

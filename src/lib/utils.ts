@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -16,4 +16,15 @@ export function formatDate(input: string | number): string {
 
 export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`;
+}
+
+export function replaceTextWithEllipsis(
+  inputText: string,
+  maxLength: number,
+): string {
+  if (inputText.length < maxLength) return inputText;
+
+  const text = inputText.slice(0, maxLength);
+
+  return text + "...";
 }

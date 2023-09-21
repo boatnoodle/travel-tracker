@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,15 +11,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { location } from "@/pages";
+import { uploadFile } from "@/lib/supabase";
 import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,7 +27,6 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { Toaster } from "./ui/toaster";
 import { useToast } from "./ui/use-toast";
 
 /* --------------------------------- Styles --------------------------------- */
@@ -45,7 +44,7 @@ const formSchema = z.object({
     message: "จังหวะนี้มันต้องโม้แล้ว เอาหน่อย",
   }),
   rate: z
-    .number()
+    .string()
     .min(0, {
       message: "อย่าไปเกรงจัยพี่ ตรงๆไปเลยกี่ดาว",
     })
@@ -55,6 +54,7 @@ const formSchema = z.object({
   placeId: z.string().min(1, {
     message: "แอ๊ะๆ จะแฮ็คหรอ!!!!!!!!",
   }),
+  images: z.any(),
 });
 
 export const CreateReviewDialog: React.FC<Props> = ({
@@ -65,12 +65,14 @@ export const CreateReviewDialog: React.FC<Props> = ({
 }) => {
   /* ---------------------------------- Hooks --------------------------------- */
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       placeId: placeData.id,
       comment: "",
-      rate: 5,
+      rate: "5",
+      images: [],
     },
   });
 
@@ -83,21 +85,74 @@ export const CreateReviewDialog: React.FC<Props> = ({
 
   /* --------------------------------- Logics --------------------------------- */
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await mutation.mutateAsync(values);
+    try {
+      setLoading(true);
+      const files = values.images;
+      let imageUrls = [];
 
-    toast({
-      title: "โม้ให้แล้วนะค้าบ",
-      description: "สาธุ~~~ ขอบคุณที่เมตตาแบ่งปันชาวแก๊ง",
-    });
-    onCreated();
-    form.reset();
+      if (files && files.length > 0) {
+        let uploadPromises = [];
+        for (const file of files) {
+          uploadPromises.push(uploadImage(file));
+        }
+
+        const uploadResults = await Promise.all(uploadPromises);
+        imageUrls = uploadResults;
+      }
+
+      await mutation.mutateAsync({
+        ...values,
+        rate: Number(values.rate),
+        imageUrls,
+      });
+      toast({
+        title: "โม้ให้แล้วนะค้าบ",
+        description: "สาธุ~~~ ขอบคุณที่เมตตาแบ่งปันชาวแก๊ง",
+      });
+
+      onCreated();
+      form.reset();
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "พังคับโพ้มม",
+        description: "เดี๋ยวกลับมาใช้ใหม่นะ ฮือๆ",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
+
+  const uploadImage = async (file: File) => {
+    try {
+      if (!file) {
+        throw new Error("You must select an image to upload.");
+      }
+
+      const fileExt = file.name.split(".").pop();
+      const filePath = `${placeData.id}-${Math.random()}.${fileExt}`;
+
+      let { error: uploadError } = await uploadFile(
+        "reviews/" + filePath,
+        file,
+      );
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      return filePath;
+    } catch (error) {
+      throw error(error);
+    }
+  };
 
   /* --------------------------------- Effects -------------------------------- */
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="h-full">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <DialogHeader>
@@ -115,7 +170,7 @@ export const CreateReviewDialog: React.FC<Props> = ({
                     <FormLabel>ให้กี่ดาวดี?</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
+                        type="string"
                         placeholder="เดี๋ยวเปลี่ยน?"
                         {...field}
                       />
@@ -141,9 +196,28 @@ export const CreateReviewDialog: React.FC<Props> = ({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="images"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>ไหนขอภาพกาวๆ หน่อย</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        multiple
+                        {...form.register("images")}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <DialogFooter>
-              <Button type="submit">โม้ ณ บัด now~~~</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "โหลดอยู่ๆ หมุนๆๆๆ(ปลอมๆ)" : "โม้ ณ บัด now~~~"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

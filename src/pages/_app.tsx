@@ -29,7 +29,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       `}</style>
       <div className={kanit.variable}>
         <Component {...pageProps} />
-        <ToastProvider duration={5000}>
+        <ToastProvider duration={3000}>
           <Toaster />
         </ToastProvider>
       </div>

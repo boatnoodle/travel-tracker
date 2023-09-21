@@ -1,5 +1,8 @@
+import { PlayCircle } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
+import { getImage } from "@/lib/supabase";
 import { Place } from "@/server/api/root";
 
 import { Button } from "./ui/button";
@@ -17,11 +20,13 @@ export const PlacePin: React.FC<Props> = ({
 }) => {
   return (
     <div className="flex h-[136px] w-[136px]  flex-col items-center bg-white shadow-lg">
-      <div className="flex-auto">
-        <img
-          src="https://via.placeholder.com/48x48"
-          alt="Restaurant Image"
-          className="h-[48px] w-[136px] rounded-md object-cover object-center"
+      <div className="relative h-[64px] w-full overflow-hidden">
+        <Image
+          src={getImage("places/" + placeData.images[0])}
+          fill={true}
+          alt="place-image"
+          objectFit="cover"
+          className="rounded-md"
         />
       </div>
       <div className="flex-auto">

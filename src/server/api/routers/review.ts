@@ -13,6 +13,7 @@ export const reviewRouter = createTRPCRouter({
         comment: z.string().min(1),
         rate: z.number().min(0.5).max(5),
         placeId: z.string().min(1),
+        imageUrls: z.array(z.string()),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -23,6 +24,7 @@ export const reviewRouter = createTRPCRouter({
           placeId: input.placeId,
           comment: input.comment,
           rate: input.rate,
+          images: input.imageUrls,
           userId: user.id,
         },
       });
@@ -33,6 +35,9 @@ export const reviewRouter = createTRPCRouter({
       return ctx.db.review.findMany({
         where: {
           placeId: input.placeId,
+        },
+        include: {
+          user: true,
         },
       });
     }),

@@ -1,21 +1,13 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { location } from "@/pages";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { replaceTextWithEllipsis } from "@/lib/utils";
 import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { DialogOverlay } from "@radix-ui/react-dialog";
 
+import { ImageSlide } from "./ImageSlider";
 import {
   Card,
   CardContent,
@@ -24,9 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { useToast } from "./ui/use-toast";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -43,8 +32,6 @@ export const AllReviewDialog: React.FC<Props> = ({
   onOpenChange,
 }) => {
   /* ---------------------------------- Hooks --------------------------------- */
-  const { toast } = useToast();
-
   const { data, isLoading } = api.review.getPlaceReviews.useQuery({
     placeId: place.id,
   });
@@ -61,7 +48,7 @@ export const AllReviewDialog: React.FC<Props> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogOverlay className="DialogOverlay">
-        <DialogContent className="DialogContent">
+        <DialogContent className="DialogContent justify-center">
           {isLoading && <h2 className="text-sm">โหลดแป๊ปๆ</h2>}
           {!isLoading && data && data.length === 0 && (
             <h2 className="text-sm">ยังไม่มีคนโม้เลยอ่ะ</h2>
@@ -69,10 +56,17 @@ export const AllReviewDialog: React.FC<Props> = ({
           {data?.map((each, idx) => (
             <Card className="w-[350px]" key={idx}>
               <CardHeader>
-                <CardTitle>รีวิวของท่าน {each.userId}</CardTitle>
+                <CardTitle>
+                  {replaceTextWithEllipsis(each.comment, 30)}
+                </CardTitle>
+                {each.images && each.images.length > 0 && (
+                  <ImageSlide images={each.images} />
+                )}
               </CardHeader>
               <CardContent>
-                <CardDescription>{each.comment}</CardDescription>
+                <CardDescription>
+                  รีวิวของท่าน: {each.user.name}
+                </CardDescription>
               </CardContent>
               <CardFooter className="flex justify-between">
                 <Button>ส่องเพิ่ม</Button>

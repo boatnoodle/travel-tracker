@@ -6,10 +6,11 @@ export const placeRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        name: z.string(),
-        lat: z.number(),
-        lng: z.number(),
+        name: z.string().min(1),
+        lat: z.number().min(1),
+        lng: z.number().min(1),
         description: z.string().nullable(),
+        images: z.array(z.string()).min(1),
       }),
     )
     .mutation(({ ctx, input }) => {
@@ -21,6 +22,7 @@ export const placeRouter = createTRPCRouter({
           description: input.description,
           lat: input.lat,
           lng: input.lng,
+          images: input.images,
           userId: user.id,
         },
       });

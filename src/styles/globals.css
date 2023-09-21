@@ -4,6 +4,9 @@
  
 @layer base {
   :root {
+    --swiper-navigation-size: 20px !important;
+    --swiper-theme-color: #000000 !important;
+
     touch-action: pan-x pan-y;
     height: 100%;
 
@@ -78,9 +81,20 @@
   }
 }
 
-
 .DialogContent {
   min-width: 300px;
-  height: 90vh;
-  overflow-y: auto;
+  height: 100vh;
+  overflow-y: scroll;
 }
+
+button.gm-ui-hover-effect {
+  visibility: hidden;
+}
+
+/* .swiper-button-next, .swiper-button-prev{
+
+}
+
+.swiper-pagination{
+
+} */
