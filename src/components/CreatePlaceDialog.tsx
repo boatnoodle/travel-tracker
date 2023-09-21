@@ -80,13 +80,10 @@ export const CreatePlaceDialog: React.FC<Props> = ({
       let imageUrls = [];
 
       if (files && files.length > 0) {
-        let uploadPromises = [];
         for (const file of files) {
-          uploadPromises.push(uploadImage(file));
+          const url = await uploadImage(file);
+          imageUrls.push(url);
         }
-
-        const uploadResults = await Promise.all(uploadPromises);
-        imageUrls = uploadResults;
       }
 
       const { lat, lng } = location;

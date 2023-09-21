@@ -93,13 +93,10 @@ export const CreateReviewDialog: React.FC<Props> = ({
       let imageUrls = [];
 
       if (files && files.length > 0) {
-        let uploadPromises = [];
         for (const file of files) {
-          uploadPromises.push(uploadImage(file));
+          const url = await uploadImage(file);
+          imageUrls.push(url);
         }
-
-        const uploadResults = await Promise.all(uploadPromises);
-        imageUrls = uploadResults;
       }
 
       await mutation.mutateAsync({
@@ -178,8 +175,6 @@ export const CreateReviewDialog: React.FC<Props> = ({
   };
 
   /* --------------------------------- Effects -------------------------------- */
-
-  console.log("form =", form.getValues());
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
