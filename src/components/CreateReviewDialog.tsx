@@ -160,11 +160,19 @@ export const CreateReviewDialog: React.FC<Props> = ({
       );
 
       if (uploadError) {
+        toast({
+          description: JSON.stringify(uploadError),
+          variant: "destructive",
+        });
         throw uploadError;
       }
 
       return filePath;
     } catch (error) {
+      toast({
+        description: JSON.stringify(error),
+        variant: "destructive",
+      });
       throw error(error);
     }
   };
