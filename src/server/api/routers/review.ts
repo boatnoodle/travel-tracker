@@ -1,10 +1,6 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 export const reviewRouter = createTRPCRouter({
   create: protectedProcedure
@@ -29,7 +25,7 @@ export const reviewRouter = createTRPCRouter({
         },
       });
     }),
-  getPlaceReviews: publicProcedure
+  getPlaceReviews: protectedProcedure
     .input(z.object({ placeId: z.string().min(1) }))
     .query(({ ctx, input }) => {
       return ctx.db.review.findMany({
@@ -41,7 +37,7 @@ export const reviewRouter = createTRPCRouter({
         },
       });
     }),
-  getMyReviews: publicProcedure.query(({ ctx }) => {
+  getMyReviews: protectedProcedure.query(({ ctx }) => {
     return ctx.db.review.findMany({
       where: {
         userId: ctx.session.user.id,
@@ -51,10 +47,19 @@ export const reviewRouter = createTRPCRouter({
       },
     });
   }),
-  getById: publicProcedure.input(z.string()).query(({ ctx, input }) => {
-    return ctx.db.review.findFirst({
+  getPlaceReviewCount: protectedProcedure
+    .input(z.object({ placeId: z.string().min(1) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.review.count({
+        where: {
+          placeId: input.placeId,
+        },
+      });
+    }),
+  getMyReviewCount: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.review.count({
       where: {
-        id: input,
+        userId: ctx.session.user.id,
       },
     });
   }),

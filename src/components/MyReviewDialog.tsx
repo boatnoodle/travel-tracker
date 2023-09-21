@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { replaceTextWithEllipsis } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { DialogOverlay } from "@radix-ui/react-dialog";
+import { DialogOverlay, DialogTitle } from "@radix-ui/react-dialog";
 import { Badge } from "@/components/ui/badge";
 
 import {
@@ -29,6 +29,8 @@ interface Props {
 export const MyReviewDialog: React.FC<Props> = ({ open, onOpenChange }) => {
   /* ---------------------------------- Hooks --------------------------------- */
   const { data, isLoading } = api.review.getMyReviews.useQuery();
+  const { data: reviewCount, isLoading: loadingReviewCount } =
+    api.review.getMyReviewCount.useQuery();
   /* --------------------------------- States --------------------------------- */
 
   /* --------------------------------- Queries -------------------------------- */
@@ -47,6 +49,7 @@ export const MyReviewDialog: React.FC<Props> = ({ open, onOpenChange }) => {
           {!isLoading && data && data.length === 0 && (
             <h2 className="text-sm">คุณต้องโม้หน่อยแล้วละ</h2>
           )}
+          <DialogTitle>รีวิวทั้งหมด: {reviewCount}</DialogTitle>
           {data?.map((each, idx) => (
             <Card className="w-[350px]" key={idx}>
               <CardHeader>
@@ -78,7 +81,9 @@ export const MyReviewDialog: React.FC<Props> = ({ open, onOpenChange }) => {
                     สถานะรีวิว: <Badge variant="outline">{each.status}</Badge>
                   </CardDescription>
                 )}
-                <CardDescription>{each.comment}</CardDescription>
+                <CardDescription>
+                  <p className="text-gray-800">{each.comment}</p>
+                </CardDescription>
               </CardContent>
             </Card>
           ))}
