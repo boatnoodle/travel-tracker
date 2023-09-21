@@ -217,6 +217,7 @@ export default function Home() {
               setSelectedPlace(null);
               setOpenAllReviewDialog(value);
             }}
+            onSelectCreateReview={onSelectPlace}
           />
         )}
       </LoadScript>

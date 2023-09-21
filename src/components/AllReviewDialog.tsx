@@ -24,12 +24,14 @@ interface Props {
   place: Place;
   open: boolean;
   onOpenChange: (value: boolean) => void;
+  onSelectCreateReview: (place: Place) => void;
 }
 
 export const AllReviewDialog: React.FC<Props> = ({
   place,
   open,
   onOpenChange,
+  onSelectCreateReview,
 }) => {
   /* ---------------------------------- Hooks --------------------------------- */
   const { data, isLoading } = api.review.getPlaceReviews.useQuery({
@@ -47,34 +49,35 @@ export const AllReviewDialog: React.FC<Props> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogOverlay className="DialogOverlay">
-        <DialogContent className="DialogContent justify-center">
-          {isLoading && <h2 className="text-sm">โหลดแป๊ปๆ</h2>}
-          {!isLoading && data && data.length === 0 && (
-            <h2 className="text-sm">ยังไม่มีคนโม้เลยอ่ะ</h2>
-          )}
-          {data?.map((each, idx) => (
-            <Card className="w-[350px]" key={idx}>
-              <CardHeader>
-                <CardTitle>
-                  {replaceTextWithEllipsis(each.comment, 30)}
-                </CardTitle>
-                {/* {each.images && each.images.length > 0 && (
+      <DialogContent className="DialogContent flex flex-col">
+        {isLoading && <h2 className="text-sm">โหลดแป๊ปๆ</h2>}
+        <Button
+          className="w-fit tracking-wide"
+          onClick={() => onSelectCreateReview(place)}
+        >
+          สร้างรีวิวของฉัน
+        </Button>
+        {!isLoading && data && data.length === 0 && (
+          <h2 className="text-sm">ยังไม่มีคนโม้เลยอ่ะ</h2>
+        )}
+
+        {data?.map((each, idx) => (
+          <Card className="w-full" key={idx}>
+            <CardHeader>
+              <CardTitle>{replaceTextWithEllipsis(each.comment, 30)}</CardTitle>
+              {/* {each.images && each.images.length > 0 && (
                   <ImageSlide images={each.images} />
                 )} */}
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  รีวิวของท่าน: {each.user.name}
-                </CardDescription>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button>ส่องเพิ่ม</Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </DialogContent>
-      </DialogOverlay>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>รีวิวของท่าน: {each.user.name}</CardDescription>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button>ส่องเพิ่ม</Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </DialogContent>
     </Dialog>
   );
 };
