@@ -94,15 +94,15 @@ export const CreatePlaceDialog: React.FC<Props> = ({
       });
 
       onCreated();
+      form.reset();
     } catch (error) {
       console.error(error);
       toast({
         title: "พังคับโพ้มม",
-        description: JSON.stringify(error),
+        description: JSON.stringify(error.message),
         variant: "destructive",
       });
     } finally {
-      form.reset();
       setLoading(false);
     }
   }
@@ -113,36 +113,45 @@ export const CreatePlaceDialog: React.FC<Props> = ({
         throw new Error("You must select an image to upload.");
       }
 
-      const fileExt = file.name.split(".").pop();
-      const imageExtensions = [
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".gif",
-        ".bmp",
-        ".tif",
-        ".tiff",
-        ".webp",
-        ".svg",
-        ".raw (various extensions)",
-        ".ico",
-        ".heif",
-        ".heic",
-        ".exif",
-      ];
-      let filePath: string;
+      // const fileExt = file.name.split(".").pop();
+      // const imageExtensions = [
+      //   ".jpg",
+      //   ".jpeg",
+      //   ".png",
+      //   ".gif",
+      //   ".bmp",
+      //   ".tif",
+      //   ".tiff",
+      //   ".webp",
+      //   ".svg",
+      //   ".raw (various extensions)",
+      //   ".ico",
+      //   ".heif",
+      //   ".heic",
+      //   ".exif",
+      // ];
+      // let filePath: string;
 
-      if (!imageExtensions.includes(fileExt)) filePath = `${Date.now()}`;
-      else filePath = `${Date.now()}.${fileExt}`;
+      // if (!imageExtensions.includes(fileExt)) filePath = `${Date.now()}`;
+      // else filePath = `${Date.now()}.${fileExt}`;
+      const filePath = Date.now() + ".jpg";
 
       let { error: uploadError } = await uploadFile("places/" + filePath, file);
 
       if (uploadError) {
+        toast({
+          description: JSON.stringify(uploadError.message),
+          variant: "destructive",
+        });
         throw uploadError;
       }
 
       return filePath;
     } catch (error) {
+      toast({
+        description: JSON.stringify(error.message),
+        variant: "destructive",
+      });
       throw error(error);
     }
   };
