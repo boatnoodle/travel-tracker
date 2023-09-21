@@ -27,6 +27,7 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
+import { Loader } from "./Loader";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -59,6 +60,7 @@ export const CreatePlaceDialog: React.FC<Props> = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      description: "",
       images: [],
     },
   });
@@ -115,7 +117,26 @@ export const CreatePlaceDialog: React.FC<Props> = ({
       }
 
       const fileExt = file.name.split(".").pop();
-      const filePath = `${Math.random()}.${fileExt}`;
+      const imageExtensions = [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".bmp",
+        ".tif",
+        ".tiff",
+        ".webp",
+        ".svg",
+        ".raw (various extensions)",
+        ".ico",
+        ".heif",
+        ".heic",
+        ".exif",
+      ];
+      let filePath: string;
+
+      if (!imageExtensions.includes(fileExt)) filePath = `${Date.now()}`;
+      else filePath = `${Date.now()}.${fileExt}`;
 
       let { error: uploadError } = await uploadFile("places/" + filePath, file);
 
@@ -190,9 +211,18 @@ export const CreatePlaceDialog: React.FC<Props> = ({
             </div>
             <DialogFooter>
               <Button type="submit" disabled={loading}>
-                {loading ? "โหลดอยู่ๆ หมุนๆๆๆ(ปลอมๆ)" : "สร้างเล้ย~~~"}
+                {loading
+                  ? "โหลดอยู่ๆ ดูน้องกลิ้งเพลินๆไปก่อนนะ"
+                  : "สร้างเล้ย~~~"}
               </Button>
             </DialogFooter>
+            {loading && (
+              <DialogFooter>
+                <div className="flex justify-center text-center">
+                  <Loader />
+                </div>
+              </DialogFooter>
+            )}
           </form>
         </Form>
       </DialogContent>

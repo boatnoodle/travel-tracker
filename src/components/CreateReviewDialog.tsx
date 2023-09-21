@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -15,7 +17,6 @@ import { uploadFile } from "@/lib/supabase";
 import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import {
   Form,
@@ -28,6 +29,7 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { useToast } from "./ui/use-toast";
+import { Loader } from "./Loader";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -219,6 +221,13 @@ export const CreateReviewDialog: React.FC<Props> = ({
                 {loading ? "โหลดอยู่ๆ หมุนๆๆๆ(ปลอมๆ)" : "โม้ ณ บัด now~~~"}
               </Button>
             </DialogFooter>
+            {loading && (
+              <DialogFooter>
+                <div className="flex justify-center text-center">
+                  <Loader />
+                </div>
+              </DialogFooter>
+            )}
           </form>
         </Form>
       </DialogContent>

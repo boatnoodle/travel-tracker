@@ -1,13 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --swiper-navigation-size: 20px !important;
     --swiper-theme-color: #000000 !important;
 
-    touch-action: pan-x pan-y;
     height: 100%;
 
     --background: 0 0% 100%;
@@ -84,10 +83,5 @@
 .DialogContent {
   min-width: 300px;
   height: 90vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
-
-button.gm-ui-hover-effect {
-  visibility: hidden;
-}
-

@@ -7,7 +7,7 @@ import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { DialogOverlay } from "@radix-ui/react-dialog";
 
-import { ImageSlide } from "./ImageSlider";
+// import { ImageSlide } from "./ImageSlider";
 import {
   Card,
   CardContent,
@@ -59,9 +59,9 @@ export const AllReviewDialog: React.FC<Props> = ({
                 <CardTitle>
                   {replaceTextWithEllipsis(each.comment, 30)}
                 </CardTitle>
-                {each.images && each.images.length > 0 && (
+                {/* {each.images && each.images.length > 0 && (
                   <ImageSlide images={each.images} />
-                )}
+                )} */}
               </CardHeader>
               <CardContent>
                 <CardDescription>

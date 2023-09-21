@@ -84,15 +84,19 @@ export default function Home() {
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        setCoords({ lat: latitude, lng: longitude });
-      },
-      // (error) => {
-      //   console.error(error);
-      //   setCoords({ lat: 13.7192347, lng: 100.3810988 });
-      // },
-    );
+    if (!navigator.geolocation) {
+      console.error("Geolocation is not supported by your browser");
+      setCoords({ lat: 13.7192347, lng: 100.3810988 });
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) => {
+          setCoords({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
+    }
   }, []);
 
   if (status !== "loading" && !session) signIn();
@@ -150,6 +154,8 @@ export default function Home() {
             zoomControl: false,
             mapTypeControl: false,
             gestureHandling: "greedy",
+            disableDoubleClickZoom: true,
+            clickableIcons: false,
           }}
           mapContainerStyle={containerStyle}
           center={coords}
@@ -158,7 +164,12 @@ export default function Home() {
         >
           {marker && marker.lat && marker.lng && (
             <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
-              <InfoWindowF position={{ lat: marker.lat, lng: marker.lng }}>
+              <InfoWindowF
+                position={{ lat: marker.lat, lng: marker.lng }}
+                options={{
+                  disableAutoPan: true,
+                }}
+              >
                 <Button onClick={() => setOpenPlaceDialog(!openPlaceDialog)}>
                   เปิดประเด็น
                 </Button>
@@ -187,6 +198,11 @@ export default function Home() {
           })}
         </GoogleMap>
       </LoadScript>
+      <div className="fixed bottom-0 right-0">
+        <Button variant="outline" onClick={() => window.location.reload()}>
+          รีเฟรช
+        </Button>
+      </div>
     </>
   );
 }
