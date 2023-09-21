@@ -32,6 +32,7 @@ export default function Home() {
   const { data: session, status } = useSession();
   const [marker, setMarker] = useState<location>();
   const [coords, setCoords] = useState<location>();
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [openPlaceDialog, setOpenPlaceDialog] = useState(false);
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [openAllReviewDialog, setOpenAllReviewDialog] = useState(false);
@@ -45,8 +46,9 @@ export default function Home() {
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete>();
 
-  const onAutocompleteLoad = (autoC: google.maps.places.Autocomplete) =>
+  const onAutocompleteLoad = (autoC: google.maps.places.Autocomplete) => {
     setAutocomplete(autoC);
+  };
 
   const onPlaceChanged = () => {
     const autoC = autocomplete;
@@ -60,6 +62,7 @@ export default function Home() {
     const lng = location.lng();
 
     setCoords({ lat, lng });
+    map.setZoom(16);
   };
 
   const onClickMap = (e: google.maps.MapMouseEvent) => {
@@ -84,19 +87,20 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      console.error("Geolocation is not supported by your browser");
-      setCoords({ lat: 13.7192347, lng: 100.3810988 });
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) => {
-          setCoords({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.error(error);
-        },
-      );
-    }
+    setCoords({ lat: 15.455884848411362, lng: 101.02946470932473 });
+    // if (!navigator.geolocation) {
+    //   console.error("Geolocation is not supported by your browser");
+    //   setCoords({ lat: 15.455884848411362, lng: 101.02946470932473 });
+    // } else {
+    //   navigator.geolocation.getCurrentPosition(
+    //     ({ coords: { latitude, longitude } }) => {
+    //       setCoords({ lat: latitude, lng: longitude });
+    //     },
+    //     (error) => {
+    //       console.error(error);
+    //     },
+    //   );
+    // }
   }, []);
 
   if (status !== "loading" && !session) signIn();
@@ -139,8 +143,9 @@ export default function Home() {
           }}
           mapContainerStyle={containerStyle}
           center={coords}
-          zoom={16}
+          zoom={6}
           onClick={onClickMap}
+          onLoad={setMap}
         >
           {marker && marker.lat && marker.lng && (
             <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
