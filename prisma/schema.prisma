@@ -58,8 +58,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    Place         Place[]
-    Review        Review[]
+    places        Place[]
+    reviews       Review[]
 }
 
 model VerificationToken {
@@ -80,7 +80,7 @@ model Place {
     images      String[]
     userId      String
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    Review      Review[]
+    reviews     Review[]
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }

@@ -42,7 +42,7 @@ export const PlacePin: React.FC<Props> = ({
           size="sm"
           onClick={() => onSelectPreviewReview(placeData)}
         >
-          อ่าน/เขียนรีวิว
+          อ่าน/เขียนรีวิว ({placeData._count.reviews})
         </Button>
       </div>
     </div>
