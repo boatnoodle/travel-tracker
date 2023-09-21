@@ -150,7 +150,10 @@ export default function Home() {
                   disableAutoPan: true,
                 }}
               >
-                <Button onClick={() => setOpenPlaceDialog(!openPlaceDialog)}>
+                <Button
+                  className="bg-gradient-to-tr from-blue-800 to-emerald-500 tracking-wide"
+                  onClick={() => setOpenPlaceDialog(!openPlaceDialog)}
+                >
                   สร้างสถานที่
                 </Button>
               </InfoWindowF>
