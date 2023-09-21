@@ -52,10 +52,10 @@ export const AllReviewDialog: React.FC<Props> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="DialogContent flex flex-col">
         <Button
-          className="flex w-fit gap-1 tracking-wide"
+          className="flex w-fit gap-1 bg-gradient-to-tr from-blue-800 to-emerald-500 tracking-wide"
           onClick={() => onSelectCreateReview(place)}
         >
-          <BiPlus />
+          <BiPlus size={16} />
           สร้างรีวิวของฉัน
         </Button>
         {isLoading && <h2 className="text-sm">กำลังโหลด...</h2>}
@@ -67,14 +67,16 @@ export const AllReviewDialog: React.FC<Props> = ({
           <Card className="w-full" key={idx}>
             <CardHeader>
               <CardTitle>{replaceTextWithEllipsis(each.comment, 30)}</CardTitle>
+              {/* <div className="h-40 overflow-hidden"> */}
               {each.images && each.images.length > 0 && (
                 <ImageSlide images={each.images} />
               )}
+              {/* </div> */}
             </CardHeader>
             <CardContent>
-              <CardDescription>รีวิวของ: {each.user.name}</CardDescription>
+              <CardDescription>รีวิวของ : {each.user.name}</CardDescription>
               <CardDescription className="flex items-center gap-1">
-                คะแนน:
+                คะแนน :
                 {new Array(each.rate)
                   .fill(<BiSolidStar color="orange" />)
                   .map((each) => {
@@ -88,7 +90,12 @@ export const AllReviewDialog: React.FC<Props> = ({
               </CardDescription>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button>อ่านรีวิวเต็ม</Button>
+              <Button
+                size="sm"
+                className="border-[1px] border-emerald-500 bg-emerald-50 tracking-wide text-emerald-500"
+              >
+                อ่านรีวิวเต็ม
+              </Button>
             </CardFooter>
           </Card>
         ))}
