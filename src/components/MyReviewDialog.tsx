@@ -7,14 +7,7 @@ import { api } from "@/utils/api";
 import { DialogOverlay, DialogTitle } from "@radix-ui/react-dialog";
 import { Badge } from "@/components/ui/badge";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "./ui/card";
 import { ImageSlide } from "./ImageSlider";
 import Image from "next/image";
 
