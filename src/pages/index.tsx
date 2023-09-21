@@ -233,7 +233,8 @@ export default function Home() {
           }}
         />
       </LoadScript>
-      <div className="fixed bottom-0 right-0 flex flex-col gap-4 px-3 py-5">
+
+      <div className="fixed bottom-0 right-0 flex flex-col items-end gap-2 px-3 py-5">
         <div className="flex justify-center">
           <Image
             src={session?.user?.image}
