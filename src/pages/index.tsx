@@ -84,19 +84,20 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      console.error("Geolocation is not supported by your browser");
-      setCoords({ lat: 13.7192347, lng: 100.3810988 });
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) => {
-          setCoords({ lat: latitude, lng: longitude });
-        },
-        (error) => {
-          console.error(error);
-        },
-      );
-    }
+    setCoords({ lat: 15.455884848411362, lng: 101.02946470932473 });
+    // if (!navigator.geolocation) {
+    //   console.error("Geolocation is not supported by your browser");
+    //   setCoords({ lat: 15.455884848411362, lng: 101.02946470932473 });
+    // } else {
+    //   navigator.geolocation.getCurrentPosition(
+    //     ({ coords: { latitude, longitude } }) => {
+    //       setCoords({ lat: latitude, lng: longitude });
+    //     },
+    //     (error) => {
+    //       console.error(error);
+    //     },
+    //   );
+    // }
   }, []);
 
   if (status !== "loading" && !session) signIn();
@@ -139,7 +140,7 @@ export default function Home() {
           }}
           mapContainerStyle={containerStyle}
           center={coords}
-          zoom={16}
+          zoom={6}
           onClick={onClickMap}
         >
           {marker && marker.lat && marker.lng && (
