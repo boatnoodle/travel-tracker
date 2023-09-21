@@ -101,7 +101,7 @@ export const CreatePlaceDialog: React.FC<Props> = ({
       console.error(error);
       toast({
         title: "พังคับโพ้มม",
-        description: "เดี๋ยวกลับมาใช้ใหม่นะ ฮือๆ",
+        description: JSON.stringify(error),
         variant: "destructive",
       });
     } finally {
