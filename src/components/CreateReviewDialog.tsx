@@ -133,7 +133,26 @@ export const CreateReviewDialog: React.FC<Props> = ({
       }
 
       const fileExt = file.name.split(".").pop();
-      const filePath = `${placeData.id}-${Math.random()}.${fileExt}`;
+      const imageExtensions = [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".bmp",
+        ".tif",
+        ".tiff",
+        ".webp",
+        ".svg",
+        ".raw (various extensions)",
+        ".ico",
+        ".heif",
+        ".heic",
+        ".exif",
+      ];
+      let filePath: string;
+
+      if (!imageExtensions.includes(fileExt)) filePath = `${Date.now()}`;
+      else filePath = `${Date.now()}.${fileExt}`;
 
       let { error: uploadError } = await uploadFile(
         "reviews/" + filePath,
