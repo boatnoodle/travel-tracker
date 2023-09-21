@@ -66,7 +66,10 @@ export const AllReviewDialog: React.FC<Props> = ({
         {data?.map((each, idx) => (
           <Card className="w-full" key={idx}>
             <CardHeader>
-              <CardTitle>{replaceTextWithEllipsis(each.comment, 30)}</CardTitle>
+              <CardTitle>
+                {/* {replaceTextWithEllipsis(each.comment, 30)} */}
+                <p className="text-sm font-normal">{each.comment}</p>
+              </CardTitle>
               {/* <div className="h-40 overflow-hidden"> */}
               {each.images && each.images.length > 0 && (
                 <ImageSlide images={each.images} />
