@@ -17,6 +17,8 @@ import {
   LoadScript,
   MarkerF,
 } from "@react-google-maps/api";
+import Image from "next/image";
+import { MyReviewDialog } from "@/components/MyReviewDialog";
 
 /* --------------------------------- Styles --------------------------------- */
 
@@ -33,6 +35,7 @@ export default function Home() {
   const [marker, setMarker] = useState<location>();
   const [coords, setCoords] = useState<location>();
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [openMyReviewDialog, setOpenMyReviewDialog] = useState(false);
   const [openPlaceDialog, setOpenPlaceDialog] = useState(false);
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [openAllReviewDialog, setOpenAllReviewDialog] = useState(false);
@@ -216,11 +219,39 @@ export default function Home() {
             }}
           />
         )}
+
+        <MyReviewDialog
+          open={openMyReviewDialog}
+          onOpenChange={(value) => {
+            setOpenMyReviewDialog(value);
+          }}
+        />
       </LoadScript>
-      <div className="fixed bottom-0 right-0 px-3 py-5">
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          รีเฟรช
-        </Button>
+      <div className="fixed bottom-0 right-0 flex flex-col gap-4 px-3 py-5">
+        <div className="flex justify-center">
+          <Image
+            src={session?.user?.image}
+            width={40}
+            height={40}
+            alt="avatar"
+            className="rounded-full"
+          />
+        </div>
+        <div className="flex">
+          <Button
+            variant="default"
+            onClick={() => {
+              setOpenMyReviewDialog(true);
+            }}
+          >
+            โปรไฟล์
+          </Button>
+        </div>
+        <div className="flex">
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            รีเฟรช
+          </Button>
+        </div>
       </div>
     </>
   );

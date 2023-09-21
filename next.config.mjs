@@ -7,7 +7,7 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  images: {domains: ["jhaqeutlyaxnwxftheqp.supabase.co"]},
+  images: {domains: ["jhaqeutlyaxnwxftheqp.supabase.co",  'lh3.googleusercontent.com']},
   /**
    * If you are using `appDir` then you must comment the below `i18n` config out.
    *
