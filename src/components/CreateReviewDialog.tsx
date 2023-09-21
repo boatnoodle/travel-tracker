@@ -18,6 +18,7 @@ import { Place } from "@/server/api/root";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Rating } from "./Rating";
 import {
   Form,
   FormControl,
@@ -152,6 +153,8 @@ export const CreateReviewDialog: React.FC<Props> = ({
 
   /* --------------------------------- Effects -------------------------------- */
 
+  console.log("form =", form.getValues());
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="DialogContent">
@@ -169,12 +172,11 @@ export const CreateReviewDialog: React.FC<Props> = ({
                 name="rate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>ให้กี่ดาวดี?</FormLabel>
+                    <FormLabel>ให้คะแนนที่นี่เท่าไร</FormLabel>
                     <FormControl>
-                      <Input
-                        type="string"
-                        placeholder="เดี๋ยวเปลี่ยน?"
-                        {...field}
+                      <Rating
+                        value={form.getValues().rate}
+                        onChange={(e) => form.setValue("rate", e)}
                       />
                     </FormControl>
                     <FormMessage />
