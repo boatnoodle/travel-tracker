@@ -1,11 +1,10 @@
-import { PlayCircle } from "lucide-react";
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 
-import { getImage } from "@/lib/supabase";
-import { Place } from "@/server/api/root";
+import { getImage } from '@/lib/supabase';
+import { Place } from '@/server/api/root';
 
-import { Button } from "./ui/button";
+import { Button } from './ui/button';
 
 interface Props {
   onSelectPreviewReview: (place: Place) => void;

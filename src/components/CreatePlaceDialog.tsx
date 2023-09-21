@@ -133,7 +133,7 @@ export const CreatePlaceDialog: React.FC<Props> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="DialogContent">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <DialogHeader>
@@ -189,7 +189,9 @@ export const CreatePlaceDialog: React.FC<Props> = ({
               />
             </div>
             <DialogFooter>
-              <Button type="submit">สร้างเล้ย~~~</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "โหลดอยู่ๆ หมุนๆๆๆ(ปลอมๆ)" : "สร้างเล้ย~~~"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

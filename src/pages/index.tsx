@@ -88,10 +88,10 @@ export default function Home() {
       ({ coords: { latitude, longitude } }) => {
         setCoords({ lat: latitude, lng: longitude });
       },
-      (error) => {
-        console.error(error);
-        setCoords({ lat: 13.7192347, lng: 100.3810988 });
-      },
+      // (error) => {
+      //   console.error(error);
+      //   setCoords({ lat: 13.7192347, lng: 100.3810988 });
+      // },
     );
   }, []);
 
