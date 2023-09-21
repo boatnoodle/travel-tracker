@@ -32,6 +32,7 @@ export default function Home() {
   const { data: session, status } = useSession();
   const [marker, setMarker] = useState<location>();
   const [coords, setCoords] = useState<location>();
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [openPlaceDialog, setOpenPlaceDialog] = useState(false);
   const [openReviewDialog, setOpenReviewDialog] = useState(false);
   const [openAllReviewDialog, setOpenAllReviewDialog] = useState(false);
@@ -45,8 +46,9 @@ export default function Home() {
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete>();
 
-  const onAutocompleteLoad = (autoC: google.maps.places.Autocomplete) =>
+  const onAutocompleteLoad = (autoC: google.maps.places.Autocomplete) => {
     setAutocomplete(autoC);
+  };
 
   const onPlaceChanged = () => {
     const autoC = autocomplete;
@@ -60,6 +62,7 @@ export default function Home() {
     const lng = location.lng();
 
     setCoords({ lat, lng });
+    map.setZoom(16);
   };
 
   const onClickMap = (e: google.maps.MapMouseEvent) => {
@@ -142,6 +145,7 @@ export default function Home() {
           center={coords}
           zoom={6}
           onClick={onClickMap}
+          onLoad={setMap}
         >
           {marker && marker.lat && marker.lng && (
             <MarkerF position={{ lat: marker.lat, lng: marker.lng }}>
