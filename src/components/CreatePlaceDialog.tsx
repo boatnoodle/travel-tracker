@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { uploadFile } from "@/lib/supabase";
-import { location } from "@/pages";
+import { location } from "@/pages/map";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 
